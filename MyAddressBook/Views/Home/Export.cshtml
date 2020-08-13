@@ -1,17 +1,28 @@
-﻿@{
+﻿@model List<MyAddressBook.Models.ContactModel>
+@{
     ViewBag.Title = "Export";
+    var grid = new WebGrid(source: Model, canPage: true, canSort: true, rowsPerPage: 10);
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+<h2>Export</h2>
+<div style="overflow:auto">
+    @grid.GetHtml(
+        tableStyle:"table table-responsive",
+        columns: grid.Columns(
+                    grid.Column("ContactID", "Contact ID"),
+                    grid.Column("FirstName", "First Name"),
+                    grid.Column("LastName", "Last Name"),
+                    grid.Column("ContactNo1", "Contact No1"),
+                    grid.Column("ContactNo2", "Contact No2"),
+                    grid.Column("EmailID", "Email ID")
+                )
+            )
 
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+</div>
+<div>
+    @using (Html.BeginForm())
+    {
+        <input type="submit" value="Export" class="btn btn-primary" />
+    }
+</div>
+

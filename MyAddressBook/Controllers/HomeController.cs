@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace MyAddressBook.Controllers
@@ -310,21 +311,72 @@ namespace MyAddressBook.Controllers
 
         public ActionResult Export()
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            List<ContactModel> allContacts = new List<ContactModel>();
+            using (MyAddressBookEntities dc = new MyAddressBookEntities())
+            {
+                var v = (from a in dc.Contacts
+                         join b in dc.Countries on a.CountryID equals b.CountryID
+                         join c in dc.States on a.StateID equals c.StateID
+                         select new ContactModel
+                         {
+                             ContactID = a.ContactID,
+                             FirstName = a.ContactPersonFname,
+                             LastName = a.ContactPersonLname,
+                             ContactNo1 = a.ContactNo1,
+                             ContactNo2 = a.ContactNo2,
+                             EmailID = a.EmailID,
+                             Country = b.CountryName,
+                             State = c.StateName,
+                             Address = a.Address,
+                             ImagePath = a.ImagePath
+                         }).ToList();
+                allContacts = v;
+            }
+            return View(allContacts);
         }
-        public ActionResult Login()
-        {
-            ViewBag.Message = "Your login page.";
 
-            return View();
-        }
-        public ActionResult Register()
+        [HttpPost]
+        [ActionName("Export")]
+        public FileResult ExportData()
         {
-            ViewBag.Message = "Your register page.";
+            List<ContactModel> allContacts = new List<ContactModel>();
+            using (MyAddressBookEntities dc = new MyAddressBookEntities())
+            {
+                var v = (from a in dc.Contacts
+                         join b in dc.Countries on a.CountryID equals b.CountryID
+                         join c in dc.States on a.StateID equals c.StateID
+                         select new ContactModel
+                         {
+                             ContactID = a.ContactID,
+                             FirstName = a.ContactPersonFname,
+                             LastName = a.ContactPersonLname,
+                             ContactNo1 = a.ContactNo1,
+                             ContactNo2 = a.ContactNo2,
+                             EmailID = a.EmailID,
+                             Country = b.CountryName,
+                             State = c.StateName,
+                             Address = a.Address,
+                             ImagePath = a.ImagePath
+                         }).ToList();
+                allContacts = v;
+            }
 
-            return View();
+            var grid = new WebGrid(source: allContacts, canPage: false, canSort: false);
+            string exportData = grid.GetHtml(
+                            tableStyle:"table table-responsive",
+                            columns: grid.Columns(
+                                        grid.Column("ContactID", "Contact ID"),
+                                        grid.Column("FirstName", "First Name"),
+                                        grid.Column("LastName", "Last Name"),
+                                        grid.Column("ContactNo1", "Contact No1"),
+                                        grid.Column("ContactNo2", "Contact No2"),
+                                        grid.Column("EmailID", "Email ID")
+                                    )
+                                ).ToHtmlString();
+            return File(new System.Text.UTF8Encoding().GetBytes(exportData),
+                    "application/vnd.ms-excel",
+                    "Contacts.xls");
+
         }
     }
 }
