@@ -169,7 +169,112 @@ namespace MyAddressBook.Controllers
             return contact;
         }
 
-         
+        public ActionResult Edit(int id)
+        {
+            // Fetch Contact
+            Contact c = null;
+            c = GetContact(id); // GetContact I have created in the previous part
+
+            if (c == null)
+            {
+                return HttpNotFound("Contact Not Found!");
+            }
+            // Fetch Country & State
+            List<Country> allCountry = new List<Country>();
+            List<State> states = new List<State>();
+            using (MyAddressBookEntities dc = new MyAddressBookEntities())
+            {
+                allCountry = dc.Countries.OrderBy(a => a.CountryName).ToList();
+                states = dc.States.Where(a => a.CountryID.Equals(c.CountryID)).OrderBy(a => a.StateName).ToList();
+            }
+            ViewBag.Country = new SelectList(allCountry, "CountryID", "CountryName", c.CountryID);
+            ViewBag.State = new SelectList(states, "StateID", "StateName", c.StateID);
+            return View(c);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Contact c, HttpPostedFileBase file)
+        {
+            #region//fetch country & state for dropdown
+
+            List<Country> allCountry = new List<Country>();
+            List<State> states = new List<State>();
+            using (MyAddressBookEntities dc = new MyAddressBookEntities())
+            {
+                allCountry = dc.Countries.OrderBy(a => a.CountryName).ToList();
+                if (c.CountryID > 0)
+                {
+                    states = dc.States.Where(a => a.CountryID.Equals(c.CountryID)).OrderBy(a => a.StateName).ToList();
+                }
+            }
+            ViewBag.Country = new SelectList(allCountry, "CountryID", "CountryName", c.CountryID);
+            ViewBag.State = new SelectList(states, "StateID", "StateName", c.StateID);
+
+            #endregion
+            #region//validate file is selected
+            if (file != null)
+            {
+                if (file.ContentLength > (512 * 1000)) // 512 KB
+                {
+                    ModelState.AddModelError("FileErrorMessage", "File size must be within 512KB");
+                }
+                string[] allowedType = new string[] { "image/png", "image/gif", "image/jpg", "image/jpeg" };
+                bool isFileTypeValid = false;
+                foreach (var i in allowedType)
+                {
+                    if (file.ContentType == i.ToString())
+                    {
+                        isFileTypeValid = true;
+                        break;
+                    }
+                }
+                if (!isFileTypeValid)
+                {
+                    ModelState.AddModelError("FileErrorMessage", "Only .png, .gif and .jpg file allowed");
+                }
+            }
+            #endregion
+            // Update Contact
+            if (ModelState.IsValid)
+            {
+                //Update Contact
+                if (file != null)
+                {
+                    string savePath = Server.MapPath("~/image");
+                    string fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+                    file.SaveAs(Path.Combine(savePath, fileName));
+                    c.ImagePath = fileName;
+                }
+
+                using (MyAddressBookEntities dc = new MyAddressBookEntities())
+                {
+                    var v = dc.Contacts.Where(a => a.ContactID.Equals(c.ContactID)).FirstOrDefault();
+                    if (v != null)
+                    {
+                        v.ContactPersonFname = c.ContactPersonFname;
+                        v.ContactPersonLname = c.ContactPersonLname;
+                        v.ContactNo1 = c.ContactNo1;
+                        v.ContactNo2 = c.ContactNo2;
+                        v.EmailID = c.EmailID;
+                        v.CountryID = c.CountryID;
+                        v.StateID = c.StateID;
+                        v.Address = c.Address;
+                        if (file != null)
+                        {
+                            v.ImagePath = c.ImagePath;
+                        }
+                    }
+                    dc.SaveChanges();
+                }
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(c);
+            }
+        }
+
 
         public ActionResult Export()
         {

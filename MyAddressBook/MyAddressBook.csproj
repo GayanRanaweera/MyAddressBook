@@ -228,6 +228,7 @@
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\View.cshtml" />
     <Content Include="Views\Shared\_ContactDetails.cshtml" />
+    <Content Include="Views\Home\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="image\" />
