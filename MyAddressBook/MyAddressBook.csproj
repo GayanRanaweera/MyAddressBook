@@ -155,6 +155,7 @@
     <Compile Include="Country.cs">
       <DependentUpon>AddressBookModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ExtendedClass\Contact.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -225,6 +226,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
+    <Content Include="Views\Home\View.cshtml" />
+    <Content Include="Views\Shared\_ContactDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="image\" />

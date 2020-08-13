@@ -1,0 +1,57 @@
+﻿@model MyAddressBook.Contact
+
+@{
+    ViewBag.Title = "ContactDetails";
+}
+
+<h4>Contact Details</h4>
+
+<div class="row">
+    <div class="col-sm-6">
+        <table class="table table-responsive">
+            <tr>
+                <td> @Html.DisplayNameFor(model => model.ContactPersonFname)</td>
+                <td> @Html.DisplayFor(model => model.ContactPersonFname)</td>
+            </tr>
+            <tr>
+                <td> @Html.DisplayNameFor(model => model.ContactPersonLname)</td>
+                <td> @Html.DisplayFor(model => model.ContactPersonLname)</td>
+            </tr>
+            <tr>
+                <td> @Html.DisplayNameFor(model => model.ContactNo1)</td>
+                <td> @Html.DisplayFor(model => model.ContactNo1)</td>
+            </tr>
+            <tr>
+                <td> @Html.DisplayNameFor(model => model.ContactNo2)</td>
+                <td> @Html.DisplayFor(model => model.ContactNo2)</td>
+            </tr>
+            <tr>
+                <td> @Html.DisplayNameFor(model => model.EmailID)</td>
+                <td> @Html.DisplayFor(model => model.EmailID)</td>
+            </tr>
+            <tr>
+                <td> @Html.DisplayNameFor(model => model.CountryName)</td>
+                <td> @Html.DisplayFor(model => model.CountryName)</td>
+            </tr>
+            <tr>
+                <td> @Html.DisplayNameFor(model => model.StateName)</td>
+                <td> @Html.DisplayFor(model => model.StateName)</td>
+            </tr></tr>
+            <tr>
+                <td> @Html.DisplayNameFor(model => model.Address)</td>
+                <td> @Html.DisplayFor(model => model.Address)</td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-sm-6">
+        <div style="display:@(string.IsNullOrEmpty(Model.ImagePath)?"none":"block")">
+            &nbsp;
+            <img src="/image/@Model.ImagePath" alt="image" style="width:100%; max-width:300px" />
+        </div>
+    </div>
+</div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ContactID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

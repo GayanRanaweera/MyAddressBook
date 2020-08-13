@@ -121,7 +121,7 @@ namespace MyAddressBook.Controllers
 
         }
 
-        // Action for fetch state
+        // Action for fetch state from jquery code
         public JsonResult GetStates(int countryID)
         {
             using (MyAddressBookEntities dc = new MyAddressBookEntities())
@@ -134,6 +134,42 @@ namespace MyAddressBook.Controllers
                 return new JsonResult { Data = State, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
         }
+
+        public ActionResult View(int id)
+        {   // To show contact details of a selected contact
+            // Before that we have used Model, now we will extend Contact Class for add Country and State Name feild
+            Contact c = null;
+            c = GetContact(id);
+            return View(c);
+        }
+
+        // Function for get Contact by id, Isolated as we will use this multiple time
+        public Contact GetContact(int contactID)
+        {
+            Contact contact = null;
+            using(MyAddressBookEntities dc = new MyAddressBookEntities())
+            {
+                var v = (from a in dc.Contacts
+                         join b in dc.Countries on a.CountryID equals b.CountryID
+                         join c in dc.States on a.StateID equals c.StateID
+                         where a.ContactID.Equals(contactID)
+                         select new
+                         {
+                             a,
+                             b.CountryName,
+                             c.StateName
+                         }).FirstOrDefault();
+                if (v != null)
+                {
+                    contact = v.a;
+                    contact.CountryName = v.CountryName;
+                    contact.StateName = v.StateName;
+                }
+            }
+            return contact;
+        }
+
+         
 
         public ActionResult Export()
         {
