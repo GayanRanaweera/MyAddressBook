@@ -4589,26 +4589,26 @@ fieldset[disabled] .navbar-default .btn-link:focus {
   color: #ccc;
 }
 .navbar-inverse {
-  background-color: #222;
-  border-color: #080808;
+    background-color: #13b6f5;
+    border-color: #13b6f5;
 }
 .navbar-inverse .navbar-brand {
-  color: #9d9d9d;
+  color: #000;
 }
 .navbar-inverse .navbar-brand:hover,
 .navbar-inverse .navbar-brand:focus {
-  color: #fff;
+  color: #eee;
   background-color: transparent;
 }
 .navbar-inverse .navbar-text {
   color: #9d9d9d;
 }
 .navbar-inverse .navbar-nav > li > a {
-  color: #9d9d9d;
+  color: #000;
 }
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
-  color: #fff;
+  color: #eee;
   background-color: transparent;
 }
 .navbar-inverse .navbar-nav > .active > a,
@@ -5950,6 +5950,15 @@ button.close {
   padding: 15px;
   text-align: right;
   border-top: 1px solid #e5e5e5;
+}
+.my-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #13b6f5;
+    color: black;
+    text-align: center;
 }
 .modal-footer .btn + .btn {
   margin-bottom: 0;

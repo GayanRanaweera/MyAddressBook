@@ -9,3 +9,10 @@
 
 @Html.Partial("_ContactDetails")
 
+@using (Html.BeginForm())
+{
+    <div>
+        @Html.ActionLink("Back to List", "Index")|
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ContactID })
+    </div>
+}

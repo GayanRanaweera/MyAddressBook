@@ -17,12 +17,16 @@
                     grid.Column("EmailID", "Email ID")
                 )
             )
-
+    <hr />
 </div>
-<div>
-    @using (Html.BeginForm())
-    {
+@using (Html.BeginForm())
+{   
+    <div class="form-group">
         <input type="submit" value="Export" class="btn btn-primary" />
-    }
-</div>
+    </div>
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+}
+
 

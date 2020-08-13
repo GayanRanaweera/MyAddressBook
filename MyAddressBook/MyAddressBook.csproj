@@ -224,8 +224,6 @@
     <Content Include="Views\Home\Add.cshtml" />
     <Content Include="Views\Home\Export.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Login.cshtml" />
-    <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\View.cshtml" />
     <Content Include="Views\Shared\_ContactDetails.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
