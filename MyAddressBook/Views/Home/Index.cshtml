@@ -1,0 +1,27 @@
+﻿@model IEnumerable<MyAddressBook.Models.ContactModel>
+
+@{
+    ViewBag.Title = "Contact List";
+    var grid = new WebGrid(source: Model, canPage: true, rowsPerPage: 10);
+    }
+
+<h4>Contact List</h4>
+
+<p>
+    @Html.ActionLink("Add New", "Add")
+</p>
+@grid.GetHtml(
+tableStyle: "table table-responsive",
+columns: grid.Columns
+    (
+        grid.Column("FirstName", "First Name"),
+        grid.Column("LastName", "Last Name"),
+        grid.Column("ContactNo1", "Contact No1"),
+        grid.Column("ContactNo2", "Contact No2"),
+        grid.Column("EmailID", "Email Id"),
+        grid.Column(header: "", format:@<text>@Html.Raw((item.ImagePath == null ? "" : "<img width='50 alt='' src='image/" + item.ImagePath + "'"))</text>),
+        grid.Column(header:"Viwe",format:(item)=> Html.ActionLink("View", "View", "Home", new {id =item.ContactID},null)),
+        grid.Column(header:"Edit", format: (item) => Html.ActionLink("Edit", "Edit", "Home", new { id = item.ContactID }, null)),
+        grid.Column(header:"Delete", format: (item) => Html.ActionLink("Delete", "Delete", "Home", new { id = item.ContactID }, null))
+    )
+)
