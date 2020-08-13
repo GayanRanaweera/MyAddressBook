@@ -37,6 +37,7 @@ namespace MyAddressBook.Controllers
             return View(contacts);
         }
 
+        // Add
         public ActionResult Add()
         {
             //fetch country data
@@ -135,6 +136,7 @@ namespace MyAddressBook.Controllers
             }
         }
 
+        // View
         public ActionResult View(int id)
         {   // To show contact details of a selected contact
             // Before that we have used Model, now we will extend Contact Class for add Country and State Name feild
@@ -169,6 +171,7 @@ namespace MyAddressBook.Controllers
             return contact;
         }
 
+        // Edit
         public ActionResult Edit(int id)
         {
             // Fetch Contact
@@ -275,6 +278,35 @@ namespace MyAddressBook.Controllers
             }
         }
 
+        // Delete
+        public ActionResult Delete(int id)
+        {
+            // Fetch Contact
+            Contact c = null;
+            c = GetContact(id);
+            return View(c);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Delete")] // Here Action Name is required as we can not make same signature for Get & Post Method
+        public ActionResult DeletrConfirm(int id)
+        {
+            using (MyAddressBookEntities dc = new MyAddressBookEntities())
+            {
+                var contact = dc.Contacts.Where(a => a.ContactID.Equals(id)).FirstOrDefault();
+                if (contact != null)
+                {
+                    dc.Contacts.Remove(contact);
+                    dc.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return HttpNotFound("Contact Not Found!");
+                }
+            }
+        }
 
         public ActionResult Export()
         {
